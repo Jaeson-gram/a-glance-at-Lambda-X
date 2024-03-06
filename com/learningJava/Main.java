@@ -1,7 +1,10 @@
 package com.learningJava;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
 
 public class Main {
 
@@ -46,6 +49,55 @@ public class Main {
 //        }, 16.0, 7.0);
         //            -> return statements only used in codeblocks, and when the method has a return type defined for it, you've got to have that return statement in your code-block
 
+        System.out.println("-----------------");
+        int anotherResult = calculator2((Integer a, Integer b) -> a + b, 16, 7);
+        var anotherResult2 = calculator2(( a, b) -> a / b, 16.0, 7.0);
+        var anotherResult3 = calculator2((a, b) -> a.toUpperCase() + " " + b.toUpperCase(), "Ayomide", "OreOluwa");
+
+        //CONSUMER INTERFACES
+        System.out.println();
+        var coords = Arrays.asList(
+                new double[] {47.8922, -91.2384},
+                new double[] {58.8922, -91.2084},
+                new double[] {52.8922, -89.2384}
+        );
+
+        coords.forEach(s -> System.out.println(Arrays.toString(s)));
+
+        BiConsumer<Double, Double> p1 = (lat, lon) -> System.out.printf("[lat:%.3f lon:%.3f]%n", lat, lon); // doesn't return anything - Consumer
+
+//        var firstPoint = coords.get(0);
+//        coords.forEach((s) -> processPoint(firstPoint[0], firstPoint[1], p1));
+
+        System.out.println();
+        coords.forEach(s -> processPoint(s[0], s[1], p1));
+
+        //OR
+
+//        System.out.println();
+//        coords.forEach(s -> processPoint(s[0], s[1], (lat, lon) -> System.out.printf("[lat:%.3f lon:%.3f]%n", lat, lon)));
+
+
+        //PREDICATE INTERFACE -> takes argument(s), tests, and returns a boolean
+        list.removeIf(s -> s.equalsIgnoreCase("bravo"));
+        list.forEach(s -> System.out.println(s));
+
+        System.out.println();
+
+        list.addAll(List.of("easy", "echoing", "errands"));
+        list.forEach(s -> System.out.println(s));
+
+        System.out.println();
+
+        list.removeIf(s -> s.contains("er")); //-> removes (er)rands
+        list.forEach(s -> System.out.println(s));
+
+        
+
+
+
+
+
 
 
     }
@@ -56,5 +108,19 @@ public class Main {
         System.out.println("Result of operation: " + result);
 
         return result;
+    }
+
+    public static <T> T calculator2(BinaryOperator<T> function, T value1, T value2){
+
+        T result = function.apply(value1,value2);
+        System.out.println("Result of operation: " + result);
+
+        return result;
+    }
+
+    //BiConsumer -> doesn't return a value, or it's return value can be ignored
+    public static <T> void processPoint(T t1, T t2, BiConsumer<T, T> consumer){
+
+        consumer.accept(t1, t2);
     }
 }
