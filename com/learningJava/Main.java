@@ -3,8 +3,10 @@ package com.learningJava;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
+import java.util.function.Supplier;
 
 public class Main {
 
@@ -92,10 +94,44 @@ public class Main {
         list.removeIf(s -> s.contains("er")); //-> removes (er)rands
         list.forEach(s -> System.out.println(s));
 
-        
+
+        //FUNCTION INTERFACES
+
+        //Unary Interface -> takes a single parameter, and returns a result of the same type
+        list.replaceAll(s -> s.charAt(0) + " - " + s.toUpperCase());
+        System.out.println("--------------------");
+        list.forEach(s -> System.out.println(s));
+
+        System.out.println("------------------");
+
+        String[] emptyString = new String[10];
+        System.out.println(Arrays.toString(emptyString));
+        Arrays.fill(emptyString, "");
+        System.out.println(Arrays.toString(emptyString));
+
+        Arrays.setAll(emptyString, (i) -> "" + (i + 1) + ". "
+        + switch (i) {
+            case 0 -> "one";
+            case 1 -> "two";
+            case 2 -> "three";
+            case 3 -> "four";
+            default -> "...";
+        });
+        System.out.println(Arrays.toString(emptyString));
 
 
+        //SUPPLIER -> Takes no argument but returns some instance of some type - T .
+        // T get()
+        //more like a factory method code, however, it doesn't have to be a new or distinct result returned.
 
+        //Jesus Loves You :) He'll never leave you, till the end of the ages <3 let go. (you can look up what <3 means)
+
+        //see randomlySelectedValues() below
+        System.out.println("------------------");
+
+        String[] names = {"Joshua", "Precious", "Ukela", "Patra"};
+        String[] randomList = randomlySelectedValues(7, names, () -> new Random().nextInt(0, names.length));
+        System.out.println(Arrays.toString(randomList));
 
 
 
@@ -122,5 +158,19 @@ public class Main {
     public static <T> void processPoint(T t1, T t2, BiConsumer<T, T> consumer){
 
         consumer.accept(t1, t2);
+    }
+
+    //Supplier Interface
+    public static String[] randomlySelectedValues(int count, String[] values, Supplier<Integer> s){
+        //the method returns an array of string with the same number of elements passed as the first argunent - count
+        //it will use the second argument to get a randomly picked value from the array
+        //it will use a Supplier interface to get an Integer to use as the index to pick the name
+
+        String[] selectedValues = new String[count];
+        for (int i = 0; i < count; i ++){ // -> this: for (int i = 0; i < count - 1; i ++).. always provided a null at the end
+            selectedValues[i] = values[s.get()];
+        }
+
+        return selectedValues;
     }
 }
